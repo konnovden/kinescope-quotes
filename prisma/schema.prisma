@@ -6,8 +6,11 @@ datasource db {
   provider = "postgresql"
   /// Use a custom environment variable for the database connection.
   /// This allows us to rotate credentials without conflicting with
-  /// Vercel's default DATABASE_URL configuration. See README for details.
-  url      = env("DATABASE_URL_NEW")
+  /// Vercel's default `DATABASE_URL` configuration. See README for details.
+  /// The variable name here (`DATABASE_URL_NEW2`) must match the environment
+  /// variable configured in Vercel. When changing credentials, set a new
+  /// variable name instead of editing an existing one to avoid UI limitations.
+  url      = env("DATABASE_URL_NEW2")
 }
 
 enum Currency {
