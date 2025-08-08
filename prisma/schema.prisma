@@ -1,7 +1,24 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+generator client {
+  provider = "prisma-client-js"
+}
 
-enum Currency { RUB EUR USD TRY }
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Currency {
+  RUB
+  EUR
+  USD
+  TRY
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
 
 model Company {
   id        String   @id @default(cuid())
@@ -16,6 +33,7 @@ model Company {
   updatedAt DateTime @updatedAt
   users     User[]
   quotes    Quote[]
+  clients   Client[]
 }
 
 model User {
@@ -27,8 +45,6 @@ model User {
   company   Company  @relation(fields: [companyId], references: [id])
   createdAt DateTime @default(now())
 }
-
-enum Role { ADMIN EDITOR VIEWER }
 
 model Client {
   id        String   @id @default(cuid())
@@ -52,10 +68,10 @@ model Quote {
   eventDate    DateTime?
   platform     String?
   currency     Currency  @default(RUB)
-  usnRate      Int       @default(7) // фиксированная ставка УСН
+  usnRate      Int       @default(7)
   discountPct  Int       @default(0)
   notes        String?
-  publicToken  String    @unique @default(uuid()) // публичная ссылка
+  publicToken  String    @unique @default(uuid())
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   lines        QuoteLine[]
@@ -63,22 +79,22 @@ model Quote {
 }
 
 model QuoteLine {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   quoteId   String
-  quote     Quote   @relation(fields: [quoteId], references: [id])
+  quote     Quote    @relation(fields: [quoteId], references: [id])
   section   String
   name      String
   unit      String
-  qty       Decimal @db.Numeric(12,2)
-  price     Decimal @db.Numeric(12,2)
+  qty       Decimal  @db.Decimal(12, 2)
+  price     Decimal  @db.Decimal(12, 2)
   note      String?
-  order     Int     @default(0)
+  order     Int      @default(0)
 }
 
 model Terms {
-  id        String  @id @default(cuid())
-  quoteId   String  @unique
-  quote     Quote   @relation(fields: [quoteId], references: [id])
+  id        String   @id @default(cuid())
+  quoteId   String   @unique
+  quote     Quote    @relation(fields: [quoteId], references: [id])
   includes  String[]
   excludes  String[]
   payment   String?
