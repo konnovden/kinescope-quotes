@@ -27,7 +27,18 @@ export async function POST(req: NextRequest) {
     discountPct: body.discountPct ?? 0,
     notes: body.notes ?? null,
     company: { connectOrCreate: { where: { id: body.companyId ?? 'seed-company' }, create: { id: body.companyId ?? 'seed-company', name: 'Kinescope' } } },
-    client: body.client ? { connectOrCreate: { where: { id: body.client.id ?? undefined }, create: { name: body.client.name ?? 'Клиент' } } } : undefined,
+    client: body.client
+      ? {
+          connectOrCreate: {
+            where: { id: body.client.id ?? undefined },
+            create: {
+              name: body.client.name ?? 'Клиент',
+              // when creating a new client, link it to the same company
+              company: { connect: { id: body.companyId ?? 'seed-company' } },
+            },
+          },
+        }
+      : undefined,
     lines: { create: (body.lines || []).map((l: any, idx: number) => ({ section: l.section, name: l.name, unit: l.unit, qty: l.qty, price: l.price, note: l.note ?? null, order: l.order ?? idx })) },
     terms: body.terms ? { create: { includes: body.terms.includes ?? [], excludes: body.terms.excludes ?? [], payment: body.terms.payment ?? null, sla: body.terms.sla ?? null } } : undefined,
   }
