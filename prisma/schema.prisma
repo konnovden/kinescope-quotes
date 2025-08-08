@@ -4,7 +4,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  /// Use a custom environment variable for the database connection.
+  /// This allows us to rotate credentials without conflicting with
+  /// Vercel's default DATABASE_URL configuration. See README for details.
+  url      = env("DATABASE_URL_NEW")
 }
 
 enum Currency {
