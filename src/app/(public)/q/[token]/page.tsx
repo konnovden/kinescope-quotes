@@ -38,7 +38,10 @@ export default async function QuotePage({ params }: { params: { token: string }}
           <div className="text-xs text-slate-500">Клиент</div>
           <div className="font-medium">{quote.client?.name}</div>
           <div className="text-sm">{quote.client?.contact}</div>
-          <div className="text-sm text-slate-600">{quote.client?.email} {quote.client?.phone and (' • ' + quote.client?.phone)}</div>
+          <div className="text-sm text-slate-600">
+            {quote.client?.email}
+            {quote.client?.phone && (' • ' + quote.client?.phone)}
+          </div>
         </div>
         <div className="p-4 rounded-2xl bg-slate-50">
           <div className="text-xs text-slate-500">Проект</div>
