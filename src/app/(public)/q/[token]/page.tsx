@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { fmt } from '@/lib/money'
+import { CopyQuoteLink } from '@/components/CopyQuoteLink'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,6 +33,9 @@ export default async function QuotePage({ params }: { params: { token: string }}
           <div>{new Date().toLocaleDateString('ru-RU')}</div>
         </div>
       </header>
+
+      {/* Show a copyable public link to this quote */}
+      <CopyQuoteLink token={params.token} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <div className="p-4 rounded-2xl bg-slate-50">
